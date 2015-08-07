@@ -1,8 +1,7 @@
-diff --git a/include/libbb.h b/include/libbb.h
-index 64167bba3dbe..bbe6cfa3bf1d 100644
---- a/include/libbb.h
-+++ b/include/libbb.h
-@@ -1785,7 +1785,7 @@ extern struct globals *const ptr_to_globals;
+diff -ruN b/include/libbb.h a/include/libbb.h
+--- b/include/libbb.h	2015-08-07 01:55:16.000000000 +0000
++++ a/include/libbb.h	2015-08-07 02:00:30.000000000 +0000
+@@ -1836,7 +1836,7 @@
   * use bb_default_login_shell and following defines.
   * If you change LIBBB_DEFAULT_LOGIN_SHELL,
   * don't forget to change increment constant. */
@@ -11,11 +10,10 @@ index 64167bba3dbe..bbe6cfa3bf1d 100644
  extern const char bb_default_login_shell[] ALIGN1;
  /* "/bin/sh" */
  #define DEFAULT_SHELL              (bb_default_login_shell+1)
-diff --git a/init/init.c b/init/init.c
-index d29328c36f9a..d411136e7932 100644
---- a/init/init.c
-+++ b/init/init.c
-@@ -1057,7 +1057,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
+diff -ruN b/init/init.c a/init/init.c
+--- b/init/init.c	2015-08-07 01:55:16.000000000 +0000
++++ a/init/init.c	2015-08-07 02:00:30.000000000 +0000
+@@ -1067,7 +1067,7 @@
  	/* Make sure environs is set to something sane */
  	putenv((char *) "HOME=/");
  	putenv((char *) bb_PATH_root_path);
@@ -24,11 +22,10 @@ index d29328c36f9a..d411136e7932 100644
  	putenv((char *) "USER=root"); /* needed? why? */
  
  	if (argv[1])
-diff --git a/shell/ash.c b/shell/ash.c
-index 71ef9a690f59..63d981ffd7a3 100644
---- a/shell/ash.c
-+++ b/shell/ash.c
-@@ -13221,11 +13221,13 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+diff -ruN b/shell/ash.c a/shell/ash.c
+--- b/shell/ash.c	2015-08-07 01:55:16.000000000 +0000
++++ a/shell/ash.c	2015-08-07 02:01:46.000000000 +0000
+@@ -13167,11 +13167,13 @@
  
  	if (argv[0] && argv[0][0] == '-')
  		isloginsh = 1;
@@ -43,17 +40,19 @@ index 71ef9a690f59..63d981ffd7a3 100644
   state1:
  		state = 2;
  		hp = lookupvar("HOME");
-@@ -13266,13 +13268,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -13212,13 +13214,16 @@
  		if (iflag) {
  			const char *hp = lookupvar("HISTFILE");
  			if (!hp) {
--				hp = lookupvar("HOME");
--				if (hp) {
--					hp = concat_path_file(hp, ".ash_history");
--					setvar2("HISTFILE", hp);
--					free((char*)hp);
--					hp = lookupvar("HISTFILE");
--				}
++/*
+ 				hp = lookupvar("HOME");
+ 				if (hp) {
+ 					hp = concat_path_file(hp, ".ash_history");
+ 					setvar0("HISTFILE", hp);
+ 					free((char*)hp);
+ 					hp = lookupvar("HISTFILE");
++*/
+ 				}
 +				setvar("HISTFILE", "/data/ash_history", 0);
  			}
  			if (hp)
